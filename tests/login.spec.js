@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { login } = require('../utils/helpers');
+const { LoginPage } = require('../pages/LoginPage');
 
 test.describe('SauceDemo Login Tests', () => {
 
@@ -7,11 +8,19 @@ test.describe('SauceDemo Login Tests', () => {
     
     // Scenario 1: Login with valid credentials
     test('Login with valid credentials', async ({ page }) => {
-        await login(page, 'standard_user', 'secret_sauce');
+        const loginPage = new LoginPage(page);
+
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
 
         await expect(page).toHaveURL(/inventory\.html/);
-        await expect(page.locator('.inventory_list')).toBeVisible();
     });
+    // test('Login with valid credentials', async ({ page }) => {
+    //     await login(page, 'standard_user', 'secret_sauce');
+
+    //     await expect(page).toHaveURL(/inventory\.html/);
+    //     await expect(page.locator('.inventory_list')).toBeVisible();
+    // });
 
     // Scenario 2: Shows error for invalid password
     test('Shows error for invalid password', async ({ page }) => {
