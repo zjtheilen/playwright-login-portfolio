@@ -13,7 +13,7 @@ test.describe('Cart functionality', () => {
         cartPage = new CartPage(page);
 
         await loginPage.goto();
-        await loginPage.login('standard_user', 'secret_sauce');
+        await loginPage.login(process.env.SAUCE_USER, process.env.SAUCE_PASS);
     });
 
     test('Add a single product to cart @smoke @regression', async ({ page }) => {

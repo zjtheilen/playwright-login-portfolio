@@ -65,19 +65,16 @@ npm install
 npx playwright install
 ```
 
-4. Run all tests
+4. Run tests
 ```bash
-npx playwright test
+npx playwright test # run all tests
+npx playwright test --grep @smoke # run smoke tests (only critical tests)
+npx playwright test --grep-invert @smoke  # run everything except smoke
 ```
 
-5. Run only smoke tests
+5. View test results
 ```bash
-npx playwright test --grep @smoke
-```
-
-6. View test results
-```bash
-npx playwright show-report
+npx playwright show-report # view HTML report
 ```
 
 ## Test Execution Summary
@@ -99,6 +96,41 @@ npx playwright show-report
     await expect(removeButton).not.toBeVisible();
     await expect(addButton).toBeVisible();
 ```
+
+## Investigating Failing Tests
+When a test fails in Playwright, artifacts are automatically generated when you have `screenshot`, `video`, or `trace` enabled in `playwright.config.js`.
+
+1. **Screenshots**
+- Captured automatically when a test fails (requires `screenshot: "only-on-failure"` in `playwright.config.js`)
+- Example file path:
+```bash
+test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\test-failed-1.png
+```
+- Open with any image viewer to see the page state at failure.
+
+2. **Videos**
+- Capture the entire test execution when enabled (`video: "on"` or `"retain-on-failure"`)
+- Example file path:
+```bash
+test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\video.webm
+```
+- Open in a browser or media player to see step-by-step test execution.
+
+3. **Traces**
+- Provide a detailed timeline of the test: DOM snapshots, network requests, console logs, and actions.
+- Example file path:
+```bash
+test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\trace.zip
+```
+- To inpsect:
+```bash
+npx playwright show-trace test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/trace.zip
+```
+- Playwright UI allows you to:
+    - Step through each action
+    - View screenshots at each step
+    - Inspect network requests and console logs
+    - Debug timing or flaky issues interactively
 
 ## Highlights
 - Implemented E2E test automation with Playwright

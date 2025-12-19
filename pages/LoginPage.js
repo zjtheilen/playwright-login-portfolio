@@ -1,12 +1,11 @@
-// pages/LoginPage.js
-class LoginPage {
+import { expect } from '@playwright/test';
+
+export class LoginPage {
     constructor(page) {
         this.page = page;
-
-        // Selectors
-        this.usernameInput = page.locator('[data-test="username"]');
-        this.passwordInput = page.locator('[data-test="password"]');
-        this.loginButton = page.locator('[data-test="login-button"]');
+        this.usernameInput = page.locator('#user-name'); // your selector
+        this.passwordInput = page.locator('#password');
+        this.loginButton = page.locator('#login-button');
         this.errorMessage = page.locator('[data-test="error"]');
     }
 
@@ -14,11 +13,18 @@ class LoginPage {
         await this.page.goto('https://www.saucedemo.com/');
     }
 
-    async login(username, password) {
-        await this.usernameInput.fill(username);
-        await this.passwordInput.fill(password);
-        await this.loginButton.click();
+    async login(username, password, allowEmpty = false) {
+    if (!allowEmpty && (!username || !password)) {
+        throw new Error(
+            `Login credentials are undefined! Check your .env file. username: ${username}, password: ${password}`
+        );
     }
+    await this.usernameInput.fill(username || '');
+    await this.passwordInput.fill(password || '');
+    await this.loginButton.click();
 }
 
-module.exports = { LoginPage };
+    async expectError(message) {
+        await expect(this.errorMessage).toHaveText(message);
+    }
+}
