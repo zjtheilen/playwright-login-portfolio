@@ -1,4 +1,4 @@
-![QA Portfolio](https://img.shields.io/badge/QA%20Portfolio-SauceDemo-blue)
+![QA Portfolio](https://img.shields.io/badge/QA%20Portfolio-Playwright-blue)
 
 # QA Automation Portfolio: SauceDemo Login
 
