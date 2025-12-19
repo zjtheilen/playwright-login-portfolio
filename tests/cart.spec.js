@@ -1,67 +1,63 @@
 // tests/cart.spec.js
 const { test, expect } = require('@playwright/test');
-const { login, addToCart, resetAppState, getCartItems } = require('../utils/helpers');
+const { CartPage } = require('../pages/CartPage');
+const { LoginPage } = require('../pages/LoginPage');
 
 test.describe('Cart functionality', () => {
-    
-    // do this at the start of every test
+
+    let cartPage;
+    let loginPage;
+
     test.beforeEach(async ({ page }) => {
-        await login(page, 'standard_user', 'secret_sauce');
+        loginPage = new LoginPage(page);
+        cartPage = new CartPage(page);
+
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'secret_sauce');
     });
 
-    // Test scenarios
-
-    // Scenario 1: add single item
-    test('Add a single product to cart', async ({ page }) => {
-        await addToCart(page, 'Sauce Labs Backpack');
-        const items = await getCartItems(page);
+    test('Add a single product to cart @smoke @regression', async ({ page }) => {
+        await cartPage.addProduct('Sauce Labs Backpack');
+        const items = await cartPage.getCartItems();
         expect(items).toContain('Sauce Labs Backpack');
     });
 
-    // Scenario 2: reset app state updates buttons
-    test('Reset App State resets Add to Cart Buttons', async ({ page }) => {
-        await addToCart(page, 'Sauce Labs Bike Light');
+    test('Reset App State resets Add to Cart Buttons @regression', async ({ page }) => {
+        await cartPage.addProduct('Sauce Labs Bike Light');
 
-        // reset app state
-        await resetAppState(page);
+        await cartPage.resetAppState();
 
-        // check to see if Add to Cart button resets
         const addButton = page.locator('button[data-test="add-to-cart-sauce-labs-bike-light"]');
         const removeButton = page.locator('button[data-test="remove-sauce-labs-bike-light"]');
 
         await expect(removeButton).not.toBeVisible();
         await expect(addButton).toBeVisible();
-    })
+    });
 
-    // Scenario 3: add multiple products
-    test('Add multiple products to cart', async ({ page }) => {
+    test('Add multiple products to cart @regression', async ({ page }) => {
         const products = ['Sauce Labs Backpack', 'Sauce Labs Bolt T-Shirt'];
         for (const product of products) {
-            await addToCart(page, product);
+            await cartPage.addProduct(product);
         }
 
-        const items = await getCartItems(page);
+        const items = await cartPage.getCartItems();
         expect(items).toEqual(expect.arrayContaining(products));
     });
 
-    // Scenario 4: cart persistance on page reload
-    test('Cart retains items after page reload', async ({ page }) => {
-        await addToCart(page, 'Sauce Labs Onesie');
-
+    test('Cart retains items after page reload @regression', async ({ page }) => {
+        await cartPage.addProduct('Sauce Labs Onesie');
         await page.reload();
 
-        const items = await getCartItems(page);
+        const items = await cartPage.getCartItems();
         expect(items).toContain('Sauce Labs Onesie');
     });
 
-    // Scenario 5: remove items from cart
-    test('Remove items from cart', async ({ page }) => {
-        await addToCart(page, 'Sauce Labs Backpack');
+    test('Remove items from cart @regression', async ({ page }) => {
+        await cartPage.addProduct('Sauce Labs Backpack');
+        await cartPage.removeProduct('Sauce Labs Backpack');
 
-        // remove
-        await page.click('button[data-test="remove-sauce-labs-backpack"]');
-
-        const items = await getCartItems(page);
+        const items = await cartPage.getCartItems();
         expect(items).not.toContain('Sauce Labs Backpack');
-    })
+    });
+
 });
