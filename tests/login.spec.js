@@ -2,7 +2,10 @@ const { test, expect } = require('@playwright/test');
 const { login } = require('../utils/helpers');
 
 test.describe('SauceDemo Login Tests', () => {
+
+    // Test Scenarios
     
+    // Scenario 1: Login with valid credentials
     test('Login with valid credentials', async ({ page }) => {
         await login(page, 'standard_user', 'secret_sauce');
 
@@ -10,6 +13,7 @@ test.describe('SauceDemo Login Tests', () => {
         await expect(page.locator('.inventory_list')).toBeVisible();
     });
 
+    // Scenario 2: Shows error for invalid password
     test('Shows error for invalid password', async ({ page }) => {
         await page.goto('https://www.saucedemo.com');
 
@@ -22,6 +26,7 @@ test.describe('SauceDemo Login Tests', () => {
         await expect(error).toContainText('Username and password do not match');
     });
 
+    // Scenario 3: Login with invalid username
     test('Login with invalid username', async ({ page }) => {
         await page.goto('https://www.saucedemo.com');
 
@@ -34,6 +39,7 @@ test.describe('SauceDemo Login Tests', () => {
         await expect(error).toContainText('Username and password do not match');
     });
 
+    // Scenario 4: Blocks login when username is empty
     test('Blocks login when username is empty', async ({ page }) => {
         await page.goto('https://www.saucedemo.com');
 
@@ -44,6 +50,7 @@ test.describe('SauceDemo Login Tests', () => {
         await expect(error).toContainText('Username is required');
     });
 
+    // Scenario 5: Blocks login when password is empty
     test('Blocks login when password is empty', async ({ page }) => {
         await page.goto('https://www.saucedemo.com');
 
@@ -54,6 +61,7 @@ test.describe('SauceDemo Login Tests', () => {
         await expect(error).toContainText('Password is required');
     });
 
+    // Scenario 6: Login with locked out user
     test('Login with locked out user', async ({ page }) => {
         await page.goto('https://www.saucedemo.com');
 
