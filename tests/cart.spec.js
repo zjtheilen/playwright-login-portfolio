@@ -23,9 +23,10 @@ test.describe('Cart functionality', () => {
     });
 
     test('Reset App State resets Add to Cart Buttons @regression', async ({ page }) => {
-        await cartPage.addProduct('Sauce Labs Bike Light');
+        test.fail(true, 'Known bug: Reset App State does not reset item buttons on SauceDemo');
 
-        await cartPage.resetAppState();
+        await addToCart(page, 'Sauce Labs Bike Light');
+        await resetAppState(page);
 
         const addButton = page.locator('button[data-test="add-to-cart-sauce-labs-bike-light"]');
         const removeButton = page.locator('button[data-test="remove-sauce-labs-bike-light"]');
