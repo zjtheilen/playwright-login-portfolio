@@ -18,7 +18,9 @@ This repository demonstrates automated testing of the [SauceDemo web app](https:
 ```
 playwright-login-portfolio/
 ├─ tests/ # Playwright test scripts
-│ └─ login.spec.js
+│ ├─ login.spec.js
+│ ├─ cart.spec.js 
+│ └─ demo.spec.js
 ├─ test-results/ # Generated test reports (after running tests)
 ├─ package.json # Project dependencies and scripts
 ├─ package-lock.json
@@ -37,7 +39,7 @@ playwright-login-portfolio/
 ## How to Use
 1. Clone the repository:
 ```bash
-git clone <repo-url>
+git clone https://github.com/zjtheilen/playwright-login-portfolio.git
 cd playwright-login-portfolio
 ```
 
@@ -62,6 +64,29 @@ npx playwright show-report
 ```
 
 ## Test Execution Summary
-| Test | Status | Notes |
-|------|--------|-------|
-| login.spec.js | TBD | TBD |
+| Area Tested | Test Cases | Passed | Failed | Notes |
+|-------------|------------|--------|--------|-------|
+| Login | 6 | 6 | 0 | All login scenarios covered |
+| Cart | 6 | 5 | 1 | Bug on Reset App State captured |
+| Total | 12 | 11 | 1 | Failures are intentional (demo site does not reset cart state correctly)
+ |
+
+**Failed Test: Reset App State resets Add to Cart Buttons**
+
+- **Locator:** `button[data-test="remove-sauce-labs-bike-light"]`
+- **Expected:** not visible
+- **Received:** visible
+- **Code Snippet:**
+```javascript
+    const addButton = page.locator('button[data-test="add-to-cart-sauce-labs-bike-light"]');
+    const removeButton = page.locator('button[data-test="remove-sauce-labs-bike-light"]');
+
+    await expect(removeButton).not.toBeVisible();
+    await expect(addButton).toBeVisible();
+```
+
+## Highlights
+- Implemented E2E test automation with Playwright
+- Created reusable helper functions for login and cart actions
+- Captured and documented a real bug in a demo website
+- Used cross-browser testing (Chrome, Firefox, WebKit)
