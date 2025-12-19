@@ -2,48 +2,43 @@
 class CartPage {
     constructor(page) {
         this.page = page;
+        this.cartLink = page.locator('.shopping_cart_link');
+        this.burgerMenuBtn = page.locator('#react-burger-menu-btn');
+        this.resetSidebarLink = page.locator('#reset_sidebar_link');
+        this.burgerCrossBtn = page.locator('#react-burger-cross-btn');
     }
 
-    // click "Add to Cart" if product is not in cart
+    async gotoCart() {
+        await this.cartLink.click();
+    }
+
     async addProduct(productName) {
         const product = this.page.locator('.inventory_item').filter({ hasText: productName });
-        const addButton = product.locator('button:has-text("Add to cart")');
-        const removeButton = product.locator('button:has-text("Remove")');
-
-        if (await removeButton.isVisible()) {
-            // product already in cart, do nothing
-            return;
-        }
-
-        await addButton.click();
+        await product.locator('button').click();
     }
 
-    // click "Remove" if product is in cart
     async removeProduct(productName) {
-        const product = this.page.locator('.inventory_item').filter({ hasText: productName });
-        const removeButton = product.locator('button:has-text("Remove")');
-        const addButton = product.locator('button:has-text("Add to cart")');
-
-        if (await addButton.isVisible()) {
-            // product not in cart, do nothing
-            return;
-        }
-
+        const removeButton = this.page.locator(`button[data-test="remove-${this._formatDataTestName(productName)}"]`);
         await removeButton.click();
     }
 
-    async getItems() {
-        await this.page.click('.shopping_cart_link');
-        return await this.page.$$eval(
+    async resetAppState() {
+        await this.burgerMenuBtn.click();
+        await this.resetSidebarLink.click();
+        await this.burgerCrossBtn.click();
+    }
+
+    async getCartItems() {
+        await this.gotoCart();
+        const items = await this.page.$$eval(
             '.cart_item .inventory_item_name',
             elements => elements.map(el => el.textContent)
         );
+        return items;
     }
 
-    async resetAppState() {
-        await this.page.click('#react-burger-menu-btn');
-        await this.page.click('#reset_sidebar_link');
-        await this.page.click('#react-burger-cross-btn');
+    _formatDataTestName(productName) {
+        return productName.toLowerCase().replace(/\s+/g, '-');
     }
 }
 
