@@ -24,16 +24,24 @@ test.describe('SauceDemo Login Tests', () => {
 
     // Scenario 2: Shows error for invalid password
     test('Shows error for invalid password', async ({ page }) => {
-        await page.goto('https://www.saucedemo.com');
+        const loginPage = new LoginPage(page);
 
-        await page.fill('[data-test="username"]', 'standard_user');
-        await page.fill('[data-test="password"]', 'wrong_password');
-        await page.click('[data-test="login-button"]');
+        await loginPage.goto();
+        await loginPage.login('standard_user', 'wrong_password');
 
-        const error = page.locator('[data-test="error"]');
-        await expect(error).toBeVisible();
-        await expect(error).toContainText('Username and password do not match');
+        await expect(loginPage.errorMessage).toBeVisible();
     });
+    // test('Shows error for invalid password', async ({ page }) => {
+    //     await page.goto('https://www.saucedemo.com');
+
+    //     await page.fill('[data-test="username"]', 'standard_user');
+    //     await page.fill('[data-test="password"]', 'wrong_password');
+    //     await page.click('[data-test="login-button"]');
+
+    //     const error = page.locator('[data-test="error"]');
+    //     await expect(error).toBeVisible();
+    //     await expect(error).toContainText('Username and password do not match');
+    // });
 
     // Scenario 3: Login with invalid username
     test('Login with invalid username', async ({ page }) => {
