@@ -1,3 +1,5 @@
+const { expect } = require('@playwright/test');
+
 const login = async (page, username, password) => {
     await page.goto('https://www.saucedemo.com');
 
@@ -6,7 +8,7 @@ const login = async (page, username, password) => {
     await page.click('[data-test="login-button"]');
 
     // verify login success by checking inventory
-    await page.waitForUrl('**/inventory.html');
+    await expect(page).toHaveURL(/inventory\.html/);
 };
 
 const addToCart = async (page, productName) => {

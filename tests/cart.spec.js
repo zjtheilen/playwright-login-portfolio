@@ -4,8 +4,9 @@ const { login, addToCart, resetAppState, getCartItems } = require('../utils/help
 
 test.describe('Cart functionality', () => {
     
+    // do this at the start of every test
     test.beforeEach(async ({ page }) => {
-        await login(page, 'standard_user', 'secret_suace');
+        await login(page, 'standard_user', 'secret_sauce');
     });
 
     // Test scenarios
@@ -17,7 +18,7 @@ test.describe('Cart functionality', () => {
         expect(items).toContain('Sauce Labs Backpack');
     });
 
-    // Scenario 1: reset app state updates buttons
+    // Scenario 2: reset app state updates buttons
     test('Reset App State resets Add to Cart Buttons', async ({ page }) => {
         await addToCart(page, 'Sauce Labs Bike Light');
 
@@ -25,8 +26,11 @@ test.describe('Cart functionality', () => {
         await resetAppState(page);
 
         // check to see if Add to Cart button resets
-        const buttonText = await page.textContent('button[data-test="add-to-cart-sauce-labs-bike-light"]');
-        expect(buttonText).toBe('Add to cart');
+        const addButton = page.locator('button[data-test="add-to-cart-sauce-labs-bike-light"]');
+        const removeButton = page.locator('button[data-test="remove-sauce-labs-bike-light"]');
+
+        await expect(removeButton).not.toBeVisible();
+        await expect(addButton).toBeVisible();
     })
 
     // Scenario 3: add multiple products
