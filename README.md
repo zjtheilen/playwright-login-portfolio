@@ -85,8 +85,7 @@ npx playwright show-report
 |-------------|------------|--------|--------|-------|
 | Login | 6 | 6 | 0 | All login scenarios covered |
 | Cart | 6 | 5 | 1 | Bug on Reset App State captured |
-| Total | 12 | 11 | 1 | Failures are intentional (demo site does not reset cart state correctly)
- |
+| Total | 12 | 11 | 1 | Failures are intentional (demo site does not reset cart state correctly) |
 
 **Failed Test: Reset App State resets Add to Cart Buttons**
 - **Locator:** `button[data-test="remove-sauce-labs-bike-light"]`
