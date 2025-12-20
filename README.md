@@ -1,4 +1,5 @@
-![QA Portfolio](https://img.shields.io/badge/QA%20Portfolio-Playwright-blue)
+![Playwright Tests](https://github.com/zjtheilen/playwright-login-portfolio/actions/workflows/playwright.yml/badge.svg)
+
 
 # QA Automation Portfolio: SauceDemo Login
 
@@ -84,18 +85,31 @@ npx playwright show-report # view HTML report
 | Cart | 6 | 5 | 1 | Bug on Reset App State captured |
 | Total | 12 | 11 | 1 | Failures are intentional (demo site does not reset cart state correctly) |
 
-**Failed Test: Reset App State resets Add to Cart Buttons**
-- **Locator:** `button[data-test="remove-sauce-labs-bike-light"]`
-- **Expected:** not visible
-- **Received:** visible
-- **Code Snippet:**
-```javascript
-    const addButton = page.locator('button[data-test="add-to-cart-sauce-labs-bike-light"]');
-    const removeButton = page.locator('button[data-test="remove-sauce-labs-bike-light"]');
+## Known Failing Test (Intentional)
+The following test is expected to fail and is intentionally kept active:
 
-    await expect(removeButton).not.toBeVisible();
-    await expect(addButton).toBeVisible();
-```
+**Reset App State resets Add to Cart Buttons** (`@regression`)
+
+**Observed Behavior**
+- After using "Reset App State", the product remains in a "Remove" state
+- The "Add to Cart" button does not reappear as expected
+
+**Expected Behavior**
+- All items should reset to an unselected state
+- "Add to Cart" buttons should be visible
+
+**Why this test is not skipped**
+- Skipping would hide a known defect
+- Keeping it active documents real application behavior
+- Ensures the issue remains visible if behavior changes
+
+**Debugging Artifacts**
+- Screenshot: captured at failure
+- Video: full test execution
+- Trace: step-by-step replay with DOM snapshots
+
+These artifacts can be reviewed via the Playwright HTML report.
+
 
 ## Investigating Failing Tests
 When a test fails in Playwright, artifacts are automatically generated when you have `screenshot`, `video`, or `trace` enabled in `playwright.config.js`.

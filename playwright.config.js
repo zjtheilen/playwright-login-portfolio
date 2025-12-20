@@ -8,8 +8,8 @@ module.exports = defineConfig({
     retries: 1, // retry once on failure
     projects: [
         { name: 'Chromium', use: { browserName: 'chromium' } },
-        // { name: 'Firefox', use: { browserName: 'firefox' } },
-        // { name: 'WebKit', use: { browserName: 'webkit' } },
+        { name: 'Firefox', use: { browserName: 'firefox' } },
+        // { name: 'WebKit', use: { browserName: 'webkit' } },  // running this in a Windows environment is problematic, only recommended for macOS
     ],
     reporter: [
         ['list'], // keep the console output simple
