@@ -1,16 +1,15 @@
-![Playwright Tests](https://github.com/zjtheilen/playwright-login-portfolio/actions/workflows/playwright.yml/badge.svg)
-
+[![Playwright Tests](https://github.com/zjtheilen/playwright-login-portfolio/actions/workflows/playwright.yml/badge.svg)](https://github.com/zjtheilen/playwright-login-portfolio/actions/workflows/playwright.yml)
 
 # QA Automation Portfolio: SauceDemo Login
 
-This repository demonstrates automated testing of the [SauceDemo web app](https://www.saucedemo.com) login workflow using Playwright. It highlights test planning, automated test implementation, and result verification.
+This repository demonstrates automated testing of the [SauceDemo web app](https://www.saucedemo.com/) login workflow using Playwright. It highlights test planning, automated test implementation, and result verification.
 
 ## Goals
-- Showcase automation skills using Playwright (JavaScript)
-- Validate login workflows including valid, invalid, and empty credentials
+- Showcase automation skills with Playwright (JavaScript)
+- Validate login workflows: valid, invalid, and empty credentials
 - Demonstrate test design, execution, and reporting
 - Implement Page Object Model (POM) for maintainable test code
-- Tag tests with @smoke and @regression for selective execution
+- Tag tests with `@smoke` and `@regression` for selective execution
 
 ## Tools & Technologies
 - Playwright Test Runner (`@playwright/test`)
@@ -85,71 +84,35 @@ npx playwright show-report # view HTML report
 | Cart | 6 | 5 | 1 | Bug on Reset App State captured |
 | Total | 12 | 11 | 1 | Failures are intentional (demo site does not reset cart state correctly) |
 
-## Known Failing Test (Intentional)
-The following test is expected to fail and is intentionally kept active:
-
+## Known Failing Test
 **Reset App State resets Add to Cart Buttons** (`@regression`)
+- **Observed Behavior**: After "Reset App State", the product remains in "Remove" state; "Add to Cart" button does not reappear.
+- **Expected Behavior**: All items reset to unselected state; "Add to Cart" buttons visible.
+- **Reason Not Skipped**: Documents a real application defect; ensures visibility if behavior changes.
+- **Debugging Artifacts**: Screenshots, videos, and traces captured automatically on failure.
 
-**Observed Behavior**
-- After using "Reset App State", the product remains in a "Remove" state
-- The "Add to Cart" button does not reappear as expected
-
-**Expected Behavior**
-- All items should reset to an unselected state
-- "Add to Cart" buttons should be visible
-
-**Why this test is not skipped**
-- Skipping would hide a known defect
-- Keeping it active documents real application behavior
-- Ensures the issue remains visible if behavior changes
-
-**Debugging Artifacts**
-- Screenshot: captured at failure
-- Video: full test execution
-- Trace: step-by-step replay with DOM snapshots
-
-These artifacts can be reviewed via the Playwright HTML report.
-
-
-## Investigating Failing Tests
-When a test fails in Playwright, artifacts are automatically generated when you have `screenshot`, `video`, or `trace` enabled in `playwright.config.js`.
+## Debugging & Artifacts
+Playwright generates artifacts when tests fail (`screenshot`, `video`, `trace` enabled in `playwright.config.js`).
 
 1. **Screenshots**
-- Captured automatically when a test fails (requires `screenshot: "only-on-failure"` in `playwright.config.js`)
-- Example file path:
-```bash
-test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\test-failed-1.png
-```
-- Open with any image viewer to see the page state at failure.
-
+    - Saved on failure (`screenshot: "only-on-failure"`)
+    - Example path: `test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/test-failed-1.png`
 2. **Videos**
-- Capture the entire test execution when enabled (`video: "on"` or `"retain-on-failure"`)
-- Example file path:
-```bash
-test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\video.webm
-```
-- Open in a browser or media player to see step-by-step test execution.
-
+    - Captures full test execution (`video: "retain-on-failure"`)
+    - Example path: `test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/video.webm`
 3. **Traces**
-- Provide a detailed timeline of the test: DOM snapshots, network requests, console logs, and actions.
-- Example file path:
-```bash
-test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\trace.zip
-```
-- To inpsect:
-```bash
-npx playwright show-trace test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/trace.zip
-```
-- Playwright UI allows you to:
-    - Step through each action
-    - View screenshots at each step
-    - Inspect network requests and console logs
-    - Debug timing or flaky issues interactively
+    - Detailed timeline with DOM snapshots, network requests, console logs, actions
+    - Example path: `test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/trace.zip`
+    - Inspect with:
+    ```bash
+    npx playwright show-trace test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/trace.zip
+
+    ```
 
 ## Highlights
-- Implemented E2E test automation with Playwright
-- Refactored login tests to use Page Object Model (POM)
-- Tagged tests with @smoke and @regression for selective runs
-- Created reusable helper functions for login and cart actions
-- Captured and documented a real bug in a demo website
-- Used cross-browser testing (Chrome, Firefox, WebKit)
+- E2E automation with Playwright
+- Refactored login tests using Page Object Model (POM)
+- Test tagging for selective execution (`@smoke`, `@regression`)
+- Reusable helper functions for login and cart actions
+- Captured and documented a real bug on the demo site
+- Cross-browser testing (Chrome, Firefox, WebKit)
