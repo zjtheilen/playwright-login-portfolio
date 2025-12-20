@@ -1,5 +1,9 @@
 name: Playwright Tests
 
+env:
+  SAUCE_USER: ${{ secrets.SAUCE_USER }}
+  SAUCE_PASS: ${{ secrets.SAUCE_PASS }}
+
 on:
   push:
     branches: [ main ]
