@@ -2,7 +2,7 @@
 const { expect } = require('@playwright/test');
 
 const login = async (page, username, password, expectSuccess = false) => {
-    await page.goto('https://www.saucedemo.com');
+    await page.goto('/');
     await page.fill('[data-test="username"]', username);
     await page.fill('[data-test="password"]', password);
     await page.click('[data-test="login-button"]');

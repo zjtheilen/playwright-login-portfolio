@@ -1,4 +1,5 @@
-![QA Portfolio](https://img.shields.io/badge/QA%20Portfolio-Playwright-blue)
+![Playwright Tests](https://github.com/zjtheilen/playwright-login-portfolio/actions/workflows/playwright.yml/badge.svg)
+
 
 # QA Automation Portfolio: SauceDemo Login
 
@@ -65,19 +66,16 @@ npm install
 npx playwright install
 ```
 
-4. Run all tests
+4. Run tests
 ```bash
-npx playwright test
+npx playwright test # run all tests
+npx playwright test --grep @smoke # run smoke tests (only critical tests)
+npx playwright test --grep-invert @smoke  # run everything except smoke
 ```
 
-5. Run only smoke tests
+5. View test results
 ```bash
-npx playwright test --grep @smoke
-```
-
-6. View test results
-```bash
-npx playwright show-report
+npx playwright show-report # view HTML report
 ```
 
 ## Test Execution Summary
@@ -87,18 +85,66 @@ npx playwright show-report
 | Cart | 6 | 5 | 1 | Bug on Reset App State captured |
 | Total | 12 | 11 | 1 | Failures are intentional (demo site does not reset cart state correctly) |
 
-**Failed Test: Reset App State resets Add to Cart Buttons**
-- **Locator:** `button[data-test="remove-sauce-labs-bike-light"]`
-- **Expected:** not visible
-- **Received:** visible
-- **Code Snippet:**
-```javascript
-    const addButton = page.locator('button[data-test="add-to-cart-sauce-labs-bike-light"]');
-    const removeButton = page.locator('button[data-test="remove-sauce-labs-bike-light"]');
+## Known Failing Test (Intentional)
+The following test is expected to fail and is intentionally kept active:
 
-    await expect(removeButton).not.toBeVisible();
-    await expect(addButton).toBeVisible();
+**Reset App State resets Add to Cart Buttons** (`@regression`)
+
+**Observed Behavior**
+- After using "Reset App State", the product remains in a "Remove" state
+- The "Add to Cart" button does not reappear as expected
+
+**Expected Behavior**
+- All items should reset to an unselected state
+- "Add to Cart" buttons should be visible
+
+**Why this test is not skipped**
+- Skipping would hide a known defect
+- Keeping it active documents real application behavior
+- Ensures the issue remains visible if behavior changes
+
+**Debugging Artifacts**
+- Screenshot: captured at failure
+- Video: full test execution
+- Trace: step-by-step replay with DOM snapshots
+
+These artifacts can be reviewed via the Playwright HTML report.
+
+
+## Investigating Failing Tests
+When a test fails in Playwright, artifacts are automatically generated when you have `screenshot`, `video`, or `trace` enabled in `playwright.config.js`.
+
+1. **Screenshots**
+- Captured automatically when a test fails (requires `screenshot: "only-on-failure"` in `playwright.config.js`)
+- Example file path:
+```bash
+test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\test-failed-1.png
 ```
+- Open with any image viewer to see the page state at failure.
+
+2. **Videos**
+- Capture the entire test execution when enabled (`video: "on"` or `"retain-on-failure"`)
+- Example file path:
+```bash
+test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\video.webm
+```
+- Open in a browser or media player to see step-by-step test execution.
+
+3. **Traces**
+- Provide a detailed timeline of the test: DOM snapshots, network requests, console logs, and actions.
+- Example file path:
+```bash
+test-results\cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression\trace.zip
+```
+- To inpsect:
+```bash
+npx playwright show-trace test-results/cart-Cart-functionality-Re-638dd--to-Cart-Buttons-regression/trace.zip
+```
+- Playwright UI allows you to:
+    - Step through each action
+    - View screenshots at each step
+    - Inspect network requests and console logs
+    - Debug timing or flaky issues interactively
 
 ## Highlights
 - Implemented E2E test automation with Playwright
