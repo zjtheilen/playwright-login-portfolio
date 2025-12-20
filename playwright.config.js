@@ -20,6 +20,6 @@ module.exports = defineConfig({
         screenshot: 'only-on-failure', // capture screenshots on failure
         video: 'retain-on-failure', // video recording of test
         trace: 'retain-on-failure', // full trace for debugging
-        headless: false
+        headless: true
     },
 });
